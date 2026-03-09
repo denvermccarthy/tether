@@ -11,8 +11,3 @@ Supabase
 Vercel / Cloudflare
 PostHog
 
-## Status
-
- Landing page
- Community survey
- Everything else
