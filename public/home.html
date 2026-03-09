@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tether — Everything your dog needs, in one place</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #1C1A14;
+      --bark:     #3B2F1E;
+      --sage:     #4A7055;
+      --sage-mid: #6B9A79;
+      --sage-lt:  #EAF2EC;
+      --sand:     #F5EFE0;
+      --sand-dk:  #EDE4CF;
+      --cream:    #FAF7F0;
+      --amber:    #C4780A;
+      --amber-lt: #FDF3DC;
+      --mist:     #F3F0E8;
+      --warm-gray:#8C8272;
+      --white:    #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* ── GRAIN OVERLAY ─────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* ── NAV ───────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      background: rgba(250,247,240,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(60,47,30,0.08);
+      transition: padding 0.3s ease;
+    }
+
+    .nav-logo {
+      font-family: 'Lora', serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--bark);
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-logo span { color: var(--sage); }
+
+    .nav-cta {
+      background: var(--sage);
+      color: var(--white);
+      border: none;
+      padding: 10px 22px;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      text-decoration: none;
+    }
+    .nav-cta:hover { background: var(--bark); transform: translateY(-1px); }
+
+    /* ── HERO ──────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 120px 48px 80px;
+      gap: 64px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .hero-text { animation: fadeUp 0.8s ease both; }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--amber-lt);
+      border: 1px solid rgba(196,120,10,0.2);
+      color: var(--amber);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+
+    .hero-eyebrow::before { content: '✦'; font-size: 0.65rem; }
+
+    h1 {
+      font-family: 'Lora', serif;
+      font-size: clamp(2.6rem, 5vw, 4rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--bark);
+      margin-bottom: 24px;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--sage);
+    }
+
+    .hero-sub {
+      font-size: 1.125rem;
+      line-height: 1.7;
+      color: var(--warm-gray);
+      max-width: 480px;
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+
+    /* ── EMAIL FORM ────────────────────────────────────── */
+    .waitlist-form {
+      display: flex;
+      gap: 0;
+      max-width: 440px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 32px rgba(60,47,30,0.12), 0 1px 4px rgba(60,47,30,0.08);
+    }
+
+    .waitlist-form input {
+      flex: 1;
+      padding: 16px 20px;
+      border: none;
+      background: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--ink);
+      outline: none;
+    }
+
+    .waitlist-form input::placeholder { color: #B8B0A0; }
+
+    .waitlist-form button {
+      padding: 16px 24px;
+      background: var(--sage);
+      color: var(--white);
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .waitlist-form button:hover { background: var(--bark); }
+
+    .form-note {
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: var(--warm-gray);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .form-note::before { content: '🔒'; font-size: 0.7rem; }
+
+    /* ── HERO VISUAL ───────────────────────────────────── */
+    .hero-visual {
+      animation: fadeUp 0.8s 0.2s ease both;
+      position: relative;
+    }
+
+    .phone-mockup {
+      background: var(--bark);
+      border-radius: 36px;
+      padding: 16px;
+      max-width: 300px;
+      margin: 0 auto;
+      box-shadow: 0 32px 80px rgba(60,47,30,0.3), 0 8px 24px rgba(60,47,30,0.15);
+      position: relative;
+    }
+
+    .phone-screen {
+      background: var(--cream);
+      border-radius: 24px;
+      overflow: hidden;
+      aspect-ratio: 9/18;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .phone-header {
+      background: var(--sage);
+      padding: 20px 16px 16px;
+      color: var(--white);
+    }
+
+    .phone-dog-name {
+      font-family: 'Lora', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .phone-dog-sub {
+      font-size: 0.7rem;
+      opacity: 0.75;
+      font-weight: 300;
+    }
+
+    .phone-avatar {
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      float: right;
+      margin-top: -36px;
+    }
+
+    .phone-body { padding: 14px 14px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+
+    .phone-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 12px 14px;
+      border: 1px solid rgba(60,47,30,0.07);
+    }
+
+    .phone-card-label {
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--sage-mid);
+      margin-bottom: 6px;
+    }
+
+    .phone-card-title {
+      font-family: 'Lora', serif;
+      font-size: 0.85rem;
+      color: var(--bark);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .phone-card-sub {
+      font-size: 0.68rem;
+      color: var(--warm-gray);
+      line-height: 1.5;
+    }
+
+    .phone-slot {
+      background: var(--sage-lt);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .phone-slot-info { font-size: 0.72rem; color: var(--bark); }
+    .phone-slot-name { font-weight: 500; }
+    .phone-slot-time { color: var(--warm-gray); font-size: 0.65rem; margin-top: 1px; }
+
+    .phone-slot-btn {
+      background: var(--sage);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.65rem;
+      padding: 5px 10px;
+      font-weight: 500;
+    }
+
+    .phone-notif {
+      background: var(--amber-lt);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.67rem;
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Floating badge */
+    .float-badge {
+      position: absolute;
+      right: -24px;
+      top: 28%;
+      background: var(--white);
+      border-radius: 14px;
+      padding: 12px 16px;
+      box-shadow: 0 8px 32px rgba(60,47,30,0.15);
+      font-size: 0.75rem;
+      color: var(--ink);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .float-badge-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--sage); }
+
+    .float-badge-2 {
+      position: absolute;
+      left: -28px;
+      bottom: 22%;
+      background: var(--bark);
+      color: var(--white);
+      border-radius: 14px;
+      padding: 10px 14px;
+      box-shadow: 0 8px 32px rgba(60,47,30,0.2);
+      font-size: 0.72rem;
+      font-weight: 500;
+      white-space: nowrap;
+      animation: float 3s 1.5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    /* ── SOCIAL PROOF BAR ──────────────────────────────── */
+    .social-bar {
+      background: var(--sand);
+      border-top: 1px solid var(--sand-dk);
+      border-bottom: 1px solid var(--sand-dk);
+      padding: 20px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    .social-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: var(--warm-gray);
+      font-weight: 300;
+    }
+
+    .social-item strong { color: var(--bark); font-weight: 500; }
+    .social-divider { width: 1px; height: 20px; background: var(--sand-dk); }
+
+    /* ── SECTION BASE ──────────────────────────────────── */
+    section { padding: 100px 48px; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 16px;
+    }
+
+    .section-tag::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--sage); }
+
+    h2 {
+      font-family: 'Lora', serif;
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--bark);
+      margin-bottom: 20px;
+    }
+
+    h2 em { font-style: italic; color: var(--sage); }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--warm-gray);
+      line-height: 1.7;
+      font-weight: 300;
+      max-width: 560px;
+      margin-bottom: 60px;
+    }
+
+    /* ── PROBLEM SECTION ───────────────────────────────── */
+    .problem { background: var(--bark); }
+
+    .problem h2 { color: var(--sand); }
+    .problem h2 em { color: var(--sage-mid); }
+    .problem .section-tag { color: var(--sage-mid); }
+    .problem .section-tag::before { background: var(--sage-mid); }
+    .problem .section-sub { color: rgba(245,239,224,0.65); }
+
+    .problem-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .problem-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 32px 28px;
+      transition: background 0.2s;
+    }
+
+    .problem-card:hover { background: rgba(255,255,255,0.08); }
+
+    .problem-icon {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .problem-card h3 {
+      font-family: 'Lora', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--sand);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .problem-card p {
+      font-size: 0.9rem;
+      color: rgba(245,239,224,0.55);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .problem-quote {
+      margin-top: 60px;
+      border-left: 3px solid var(--sage-mid);
+      padding-left: 28px;
+    }
+
+    .problem-quote blockquote {
+      font-family: 'Lora', serif;
+      font-size: 1.35rem;
+      font-style: italic;
+      color: var(--sand);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .problem-quote cite {
+      font-size: 0.82rem;
+      color: rgba(245,239,224,0.45);
+      font-style: normal;
+      font-weight: 300;
+    }
+
+    /* ── GUIDE / EMPATHY ───────────────────────────────── */
+    .guide { background: var(--cream); }
+
+    .guide-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .guide-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .stat-card {
+      background: var(--sand);
+      border-radius: 16px;
+      padding: 28px 24px;
+      border: 1px solid var(--sand-dk);
+    }
+
+    .stat-num {
+      font-family: 'Lora', serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--sage);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--warm-gray);
+      line-height: 1.5;
+      font-weight: 300;
+    }
+
+    /* ── HOW IT WORKS ──────────────────────────────────── */
+    .how { background: var(--sand); }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      position: relative;
+      margin-top: 60px;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: calc(100% / 6);
+      right: calc(100% / 6);
+      height: 1px;
+      background: var(--sand-dk);
+      z-index: 0;
+    }
+
+    .step {
+      padding: 0 32px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--sage);
+      color: var(--white);
+      font-family: 'Lora', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 0 6px var(--sand);
+    }
+
+    .step h3 {
+      font-family: 'Lora', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--bark);
+      margin-bottom: 12px;
+    }
+
+    .step p {
+      font-size: 0.88rem;
+      color: var(--warm-gray);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* ── FEATURES ──────────────────────────────────────── */
+    .features { background: var(--cream); }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 36px 32px;
+      border: 1px solid rgba(60,47,30,0.07);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(60,47,30,0.1);
+    }
+
+    .feature-card.large {
+      grid-column: span 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      background: var(--sage-lt);
+      border-color: rgba(74,112,85,0.15);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .feature-card h3 {
+      font-family: 'Lora', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--bark);
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--warm-gray);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .feature-tag {
+      display: inline-block;
+      background: var(--sage-lt);
+      color: var(--sage);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+      margin-bottom: 14px;
+    }
+
+    .feature-card.large .feature-tag {
+      background: rgba(74,112,85,0.15);
+    }
+
+    .no-app-demo {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 20px;
+      border: 1px solid rgba(74,112,85,0.15);
+    }
+
+    .no-app-msg {
+      background: var(--mist);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      font-size: 0.82rem;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    .no-app-msg strong { font-weight: 500; color: var(--bark); }
+
+    .no-app-action {
+      display: flex;
+      gap: 8px;
+    }
+
+    .no-app-btn {
+      flex: 1;
+      background: var(--sage);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      text-align: center;
+      cursor: default;
+    }
+
+    .no-app-btn.outline {
+      background: transparent;
+      border: 1px solid rgba(74,112,85,0.3);
+      color: var(--sage);
+    }
+
+    /* ── CTA ───────────────────────────────────────────── */
+    .cta-section {
+      background: var(--sage);
+      padding: 100px 48px;
+      text-align: center;
+    }
+
+    .cta-section h2 { color: var(--white); margin-bottom: 16px; }
+    .cta-section h2 em { color: var(--sand); }
+
+    .cta-section .section-sub {
+      color: rgba(255,255,255,0.7);
+      margin: 0 auto 48px;
+    }
+
+    .cta-form {
+      display: flex;
+      gap: 0;
+      max-width: 420px;
+      margin: 0 auto;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+    }
+
+    .cta-form input {
+      flex: 1;
+      padding: 16px 20px;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      background: var(--white);
+      color: var(--ink);
+    }
+
+    .cta-form button {
+      padding: 16px 24px;
+      background: var(--bark);
+      color: var(--white);
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .cta-form button:hover { background: var(--ink); }
+
+    .cta-note {
+      margin-top: 14px;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ── FOOTER ────────────────────────────────────────── */
+    footer {
+      background: var(--bark);
+      padding: 40px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-family: 'Lora', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--sand);
+    }
+
+    .footer-logo span { color: var(--sage-mid); }
+
+    footer p {
+      font-size: 0.78rem;
+      color: rgba(245,239,224,0.35);
+      font-weight: 300;
+    }
+
+    /* ── ANIMATIONS ────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── SUCCESS STATE ─────────────────────────────────── */
+    .success-msg {
+      display: none;
+      background: var(--sage-lt);
+      border: 1px solid rgba(74,112,85,0.2);
+      border-radius: 12px;
+      padding: 16px 24px;
+      font-size: 0.9rem;
+      color: var(--sage);
+      font-weight: 500;
+      align-items: center;
+      gap: 10px;
+      max-width: 440px;
+    }
+
+    .success-msg.show { display: flex; }
+
+    /* ── RESPONSIVE ────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; text-align: center; }
+      .hero-sub { margin-left: auto; margin-right: auto; }
+      .waitlist-form { margin: 0 auto; }
+      .form-note { justify-content: center; }
+      .hero-visual { display: none; }
+      section { padding: 72px 24px; }
+      .social-bar { padding: 16px 24px; gap: 24px; }
+      .social-divider { display: none; }
+      .problem-cards { grid-template-columns: 1fr; }
+      .guide-inner { grid-template-columns: 1fr; }
+      .steps::before { display: none; }
+      .steps { grid-template-columns: 1fr; gap: 40px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .feature-card.large { grid-column: span 1; grid-template-columns: 1fr; }
+      .cta-section { padding: 72px 24px; }
+      footer { flex-direction: column; gap: 12px; text-align: center; padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Tether<span>.</span></div>
+    <a href="#waitlist" class="nav-cta">Join the waitlist</a>
+  </nav>
+
+  <!-- HERO -->
+  <section style="padding: 0;">
+    <div class="hero">
+      <div class="hero-text">
+        <div class="hero-eyebrow">Coming soon</div>
+        <h1>Your dog's whole life,<br /><em>finally organized.</em></h1>
+        <p class="hero-sub">
+          Tether is the one place for your dog's care — their records, their routines, and the people who help you take care of them. No more briefing everyone from scratch. No more "wait, did anyone walk her?"
+        </p>
+
+        <div id="hero-form-wrap">
+          <form class="waitlist-form" onsubmit="handleSubmit(event, 'hero')">
+            <input type="email" id="hero-email" placeholder="Your email address" required />
+            <button type="submit">Get early access</button>
+          </form>
+          <p class="form-note">No spam. Just updates when we launch.</p>
+        </div>
+        <div class="success-msg" id="hero-success">
+          ✓&nbsp; You're on the list! We'll be in touch.
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div style="position: relative; display: inline-block;">
+          <div class="phone-mockup">
+            <div class="phone-screen">
+              <div class="phone-header">
+                <div class="phone-avatar">🐕</div>
+                <div class="phone-dog-name">Luna's Profile</div>
+                <div class="phone-dog-sub">Golden Retriever · 3 yrs · Portland, OR</div>
+              </div>
+              <div class="phone-body">
+                <div class="phone-card">
+                  <div class="phone-card-label">Today's Care</div>
+                  <div class="phone-slot">
+                    <div class="phone-slot-info">
+                      <div class="phone-slot-name">🦮 Evening Walk</div>
+                      <div class="phone-slot-time">5:00 PM · Unclaimed</div>
+                    </div>
+                    <button class="phone-slot-btn">Claim</button>
+                  </div>
+                </div>
+                <div class="phone-card">
+                  <div class="phone-card-label">Care Circle</div>
+                  <div class="phone-card-title">Sarah claimed the morning walk</div>
+                  <div class="phone-card-sub">Sent a photo · 8:14 AM ✓</div>
+                </div>
+                <div class="phone-notif">
+                  🔔 Flea treatment due in 3 days
+                </div>
+                <div class="phone-card">
+                  <div class="phone-card-label">Health Record</div>
+                  <div class="phone-card-title">Annual checkup</div>
+                  <div class="phone-card-sub">Dr. Patel · May 2025 · All clear ✓</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="float-badge">
+            <div class="float-badge-dot"></div>
+            No app needed for your family
+          </div>
+
+          <div class="float-badge-2">
+            🐾 Luna's profile shared
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF BAR -->
+  <div class="social-bar">
+    <div class="social-item"><strong>Built for</strong> the dog owner who does it all</div>
+    <div class="social-divider"></div>
+    <div class="social-item"><strong>No app required</strong> for your care circle</div>
+    <div class="social-divider"></div>
+    <div class="social-item"><strong>One profile</strong> your whole world can access</div>
+    <div class="social-divider"></div>
+    <div class="social-item"><strong>Free</strong> to join the waitlist</div>
+  </div>
+
+  <!-- PROBLEM SECTION -->
+  <section class="problem">
+    <div class="section-inner">
+      <div class="section-tag">The problem</div>
+      <h2>You love your dog.<br /><em>The coordination</em> is exhausting.</h2>
+      <p class="section-sub">You've built a patchwork of texts, folders, verbal briefings, and crossed fingers. It works — until it doesn't.</p>
+
+      <div class="problem-cards reveal">
+        <div class="problem-card">
+          <span class="problem-icon">📂</span>
+          <h3>"Where did I put that vet record?"</h3>
+          <p>Vaccination history in an email. Medications on a Post-it. Emergency contacts in your head. Every new sitter gets the same 10-minute briefing — every single time.</p>
+        </div>
+        <div class="problem-card">
+          <span class="problem-icon">💬</span>
+          <h3>"Wait, did anyone walk her today?"</h3>
+          <p>The group text that spirals. The double-walk that happens anyway. The guilt when you realize she's been home alone for six hours and nobody caught it.</p>
+        </div>
+        <div class="problem-card">
+          <span class="problem-icon">🙏</span>
+          <h3>"I hate asking the same people again."</h3>
+          <p>You have a circle of people who genuinely want to help — but coordinating them feels like project management. So you either hire a stranger or just don't go.</p>
+        </div>
+      </div>
+
+      <div class="problem-quote reveal">
+        <blockquote>"I have a Google Doc, a shared note, three different text threads, and I still forget to tell people she can't have grain-free food."</blockquote>
+        <cite>— Every dog owner we've talked to</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- GUIDE / EMPATHY -->
+  <section class="guide">
+    <div class="section-inner">
+      <div class="guide-inner">
+        <div class="reveal">
+          <div class="section-tag">We get it</div>
+          <h2>Your dog deserves better than<br /><em>a group text.</em></h2>
+          <p class="section-sub" style="margin-bottom: 0;">
+            We built Tether because we've lived this too. The guilt of a missed walk. The anxiety of leaving your dog with someone who only got a two-minute briefing. The exhaustion of being the only person who holds all the information.
+            <br /><br />
+            You don't need a new system to manage. You need one place that does it quietly, so you can stop thinking about it.
+          </p>
+        </div>
+
+        <div class="guide-stats reveal">
+          <div class="stat-card">
+            <div class="stat-num">65%</div>
+            <div class="stat-label">of dog owners rely on friends or family for regular care — not professional sitters</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">3+</div>
+            <div class="stat-label">places the average dog owner stores their dog's information</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">89M</div>
+            <div class="stat-label">dogs in the US — and almost none of them have a single source of truth</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">0</div>
+            <div class="stat-label">apps built for coordinating care with your trusted personal circle</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how">
+    <div class="section-inner">
+      <div class="section-tag">How it works</div>
+      <h2>Simple enough that<br /><em>everyone actually uses it.</em></h2>
+      <p class="section-sub">Three layers, each one valuable on its own.</p>
+
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-num">1</div>
+          <h3>Build Luna's profile</h3>
+          <p>Add your dog's vet records, routines, medications, and care notes. Everything in one place — shareable as a full profile or a custom snapshot depending on who needs it.</p>
+        </div>
+        <div class="step reveal" style="transition-delay: 0.1s;">
+          <div class="step-num">2</div>
+          <h3>Post a care need</h3>
+          <p>Need someone to walk her Tuesday at 3pm? Post it. Your circle gets a simple link — no app download, no account. They tap to claim, see exactly what to do, and check off when they're done.</p>
+        </div>
+        <div class="step reveal" style="transition-delay: 0.2s;">
+          <div class="step-num">3</div>
+          <h3>Everyone stays in the loop</h3>
+          <p>You see updates as they happen — task check-offs, photo updates, anything out of the ordinary. Your dog is cared for. You didn't have to coordinate it all yourself.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="section-inner">
+      <div class="section-tag">What's inside</div>
+      <h2>Everything your dog needs.<br /><em>Nothing you don't.</em></h2>
+      <p class="section-sub">Tether is built in layers — each one stands alone, and all of them work better together.</p>
+
+      <div class="features-grid">
+
+        <!-- Big card: No-app magic link -->
+        <div class="feature-card large reveal">
+          <div>
+            <span class="feature-tag">The killer feature</span>
+            <span class="feature-icon">✉️</span>
+            <h3>No app required for the people around you</h3>
+            <p>Your mom shouldn't need to create an account to feed your dog. Your neighbor shouldn't need to download anything to claim a walk slot. Tether sends a simple link — they click, they see what to do, they check it off. From their browser. Right now.</p>
+          </div>
+          <div class="no-app-demo">
+            <div class="no-app-msg">
+              <strong>Hey Sarah 👋</strong> — Mia needs her evening walk today at 5pm. Here's everything you need to know about her.
+            </div>
+            <div class="no-app-msg">
+              🦮 Walk: 20–30 min<br />
+              🍗 Treat after: yes<br />
+              ⚠️ Reactive to big dogs — keep distance
+            </div>
+            <div class="no-app-action">
+              <div class="no-app-btn">✓ I've got it</div>
+              <div class="no-app-btn outline">Can't make it</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-card reveal">
+          <span class="feature-tag">Layer 1</span>
+          <span class="feature-icon">🪪</span>
+          <h3>One profile for your dog's whole life</h3>
+          <p>Vet records, vaccines, medications, feeding routines, behavioral notes — all in one place. Share the full profile or a custom slice depending on who's asking. Export to PDF for insurance claims or new vets in seconds.</p>
+        </div>
+
+        <div class="feature-card reveal" style="transition-delay: 0.1s;">
+          <span class="feature-tag">Layer 2</span>
+          <span class="feature-icon">📅</span>
+          <h3>Care coordination that actually works</h3>
+          <p>Post care needs, assign your circle, set optional pay amounts, sync to your calendar. The right people are notified in the right order — partner first, then family, then friends — so nothing falls through.</p>
+        </div>
+
+        <div class="feature-card reveal" style="transition-delay: 0.1s;">
+          <span class="feature-tag">Layer 1</span>
+          <span class="feature-icon">🔔</span>
+          <h3>Preventative care reminders</h3>
+          <p>Monthly flea treatment. Annual vet visit. Heartworm prevention. Tether tracks it all and nudges you before you forget — not after. Your dog's health, quietly managed.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <span class="feature-tag">Coming in Layer 3</span>
+          <span class="feature-icon">🐕</span>
+          <h3>Find compatible playmates nearby</h3>
+          <p>Match with dogs by temperament, energy, and size — not whoever shows up at the park. Perfect for selective or reactive dogs who need a more controlled social life.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="cta-section" id="waitlist">
+    <div class="section-inner" style="max-width: 640px; text-align: center;">
+      <div class="section-tag" style="justify-content: center; color: rgba(255,255,255,0.6);">Join the waitlist</div>
+      <h2>Be the first to know<br />when <em>Tether</em> launches.</h2>
+      <p class="section-sub" style="margin-left: auto; margin-right: auto;">
+        We're building Tether for dog owners who are tired of duct-taping their dog's life together. Join the waitlist and we'll keep you in the loop — and give you early access when we're ready.
+      </p>
+
+      <div id="cta-form-wrap">
+        <form class="cta-form" onsubmit="handleSubmit(event, 'cta')">
+          <input type="email" id="cta-email" placeholder="Your email address" required />
+          <button type="submit">Join the waitlist</button>
+        </form>
+      </div>
+      <div class="success-msg" id="cta-success" style="margin: 0 auto; justify-content: center;">
+        ✓&nbsp; You're on the list! We'll be in touch.
+      </div>
+      <p class="cta-note">No spam. No pressure. Just Tether, when it's ready.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Tether<span>.</span></div>
+    <p>© 2026 Tether. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // ── Scroll reveal ──────────────────────────────────────────────
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ── Form submission ────────────────────────────────────────────
+    function handleSubmit(e, id) {
+      e.preventDefault();
+      const email = document.getElementById(id + '-email').value;
+
+      // In production, send email to your backend / Mailchimp / Beehiiv / etc.
+      // For now, simulate success
+      console.log('Waitlist signup:', email);
+
+      document.getElementById(id + '-form-wrap').style.display = 'none';
+      document.getElementById(id + '-success').classList.add('show');
+
+      // Store locally so user doesn't see form again
+      try { localStorage.setItem('tether_waitlist', email); } catch(e) {}
+    }
+
+    // ── Nav shrink on scroll ──────────────────────────────────────
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('nav');
+      if (window.scrollY > 60) {
+        nav.style.padding = '12px 48px';
+      } else {
+        nav.style.padding = '20px 48px';
+      }
+    });
+  </script>
+</body>
+</html>
